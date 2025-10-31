@@ -14,17 +14,17 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 30 100% 96%;
+  --background: 40 55% 96%;
 
-  --foreground: 240 6% 10%;
+  --foreground: 25 20% 20%;
 
-  --border: 0 0% 88%;
+  --border: 40 30% 85%;
 
-  --card: 0 0% 96%;
+  --card: 40 60% 98%;
 
-  --card-foreground: 240 6% 10%;
+  --card-foreground: 25 20% 20%;
 
-  --card-border: 0 0% 91%;
+  --card-border: 40 30% 90%;
 
   --sidebar: 0 0% 94%;
 
@@ -32,15 +32,15 @@
 
   --sidebar-border: 0 0% 88%;
 
-  --sidebar-primary: 328 100% 68%;
+  --sidebar-primary: 45 86% 56%;
 
-  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-foreground: 25 20% 20%;
 
   --sidebar-accent: 0 0% 90%;
 
   --sidebar-accent-foreground: 240 6% 10%;
 
-  --sidebar-ring: 328 100% 68%;
+  --sidebar-ring: 45 86% 56%;
 
   --popover: 0 0% 92%;
 
@@ -48,38 +48,38 @@
 
   --popover-border: 0 0% 86%;
 
-  --primary: 328 100% 68%;
+  --primary: 45 86% 56%;
 
-  --primary-foreground: 0 0% 100%;
+  --primary-foreground: 25 20% 20%;
 
-  --secondary: 0 0% 88%;
+  --secondary: 0 72% 77%;
 
-  --secondary-foreground: 240 6% 10%;
+  --secondary-foreground: 25 20% 20%;
 
-  --muted: 0 3% 90%;
+  --muted: 40 25% 90%;
 
-  --muted-foreground: 240 5% 26%;
+  --muted-foreground: 25 15% 45%;
 
-  --accent: 45 100% 89%;
+  --accent: 197 58% 85%;
 
-  --accent-foreground: 240 6% 10%;
+  --accent-foreground: 25 20% 20%;
 
   --destructive: 0 84% 60%;
 
   --destructive-foreground: 0 0% 100%;
 
   --input: 0 0% 78%;
-  --ring: 328 100% 68%;
-  --chart-1: 45 100% 64%;
-  --chart-2: 328 100% 68%;
-  --chart-3: 262 47% 80%;
-  --chart-4: 240 6% 10%;
-  --chart-5: 30 100% 96%;
+  --ring: 45 86% 56%;
+  --chart-1: 45 86% 56%;
+  --chart-2: 0 72% 77%;
+  --chart-3: 197 58% 61%;
+  --chart-4: 25 20% 20%;
+  --chart-5: 40 55% 96%;
 
-  --font-sans: Poppins, Inter, sans-serif;
+  --font-sans: Poppins, Outfit, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
-  --radius: .5rem; /* 8px */
+  --radius: 1rem; /* 16px - more rounded like Olliepop */
   --shadow-2xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
   --shadow-xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
   --shadow-sm: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
@@ -150,15 +150,15 @@
 
   --sidebar-border: 240 5% 14%;
 
-  --sidebar-primary: 328 100% 68%;
+  --sidebar-primary: 45 86% 56%;
 
-  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-foreground: 25 20% 20%;
 
   --sidebar-accent: 240 4% 13%;
 
   --sidebar-accent-foreground: 0 0% 95%;
 
-  --sidebar-ring: 328 100% 68%;
+  --sidebar-ring: 45 86% 56%;
 
   --popover: 240 5% 12%;
 
@@ -166,9 +166,9 @@
 
   --popover-border: 240 5% 16%;
 
-  --primary: 328 100% 68%;
+  --primary: 45 86% 56%;
 
-  --primary-foreground: 0 0% 100%;
+  --primary-foreground: 25 20% 20%;
 
   --secondary: 240 4% 15%;
 
@@ -178,7 +178,7 @@
 
   --muted-foreground: 0 0% 70%;
 
-  --accent: 45 95% 25%;
+  --accent: 197 58% 35%;
 
   --accent-foreground: 0 0% 95%;
 
@@ -187,9 +187,9 @@
   --destructive-foreground: 0 0% 100%;
 
   --input: 240 5% 26%;
-  --ring: 328 100% 68%;
-  --chart-1: 45 100% 64%;
-  --chart-2: 328 100% 68%;
+  --ring: 45 86% 56%;
+  --chart-1: 45 86% 56%;
+  --chart-2: 0 72% 77%;
   --chart-3: 262 47% 80%;
   --chart-4: 0 0% 95%;
   --chart-5: 30 10% 20%;
