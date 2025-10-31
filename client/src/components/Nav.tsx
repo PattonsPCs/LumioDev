@@ -28,23 +28,23 @@ export default function Nav({ cartCount = 0, onCartClick }: NavProps) {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           <Link href="/">
-            <a className="flex items-center gap-2 hover-elevate active-elevate-2 px-3 py-1.5 rounded-xl" data-testid="link-home">
+            <div className="flex items-center gap-2 hover-elevate active-elevate-2 px-3 py-1.5 rounded-xl cursor-pointer" data-testid="link-home">
               <SunLogo size={32} animate={true} />
               <span className="text-2xl font-bold text-primary">Lumio</span>
-            </a>
+            </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <a
-                  className={`text-sm font-medium transition-colors hover:text-primary px-3 py-1.5 rounded-xl hover-elevate ${
+                <div
+                  className={`text-sm font-medium transition-colors hover:text-primary px-3 py-1.5 rounded-xl hover-elevate cursor-pointer ${
                     location === link.href ? "text-primary font-bold" : "text-foreground"
                   }`}
                   data-testid={`link-${link.label.toLowerCase()}`}
                 >
                   {link.label}
-                </a>
+                </div>
               </Link>
             ))}
           </div>
@@ -94,15 +94,15 @@ export default function Nav({ cartCount = 0, onCartClick }: NavProps) {
             <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
-                  <a
-                    className={`block px-4 py-2.5 rounded-xl text-sm font-medium hover-elevate ${
+                  <div
+                    className={`block px-4 py-2.5 rounded-xl text-sm font-medium hover-elevate cursor-pointer ${
                       location === link.href ? "bg-accent text-accent-foreground font-bold" : ""
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                     data-testid={`mobile-link-${link.label.toLowerCase()}`}
                   >
                     {link.label}
-                  </a>
+                  </div>
                 </Link>
               ))}
             </div>

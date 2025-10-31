@@ -39,9 +39,9 @@ export default function Footer() {
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href}>
-                      <a className="text-sm text-muted-foreground hover:text-primary transition-colors hover-elevate px-2 py-1 rounded-xl inline-block font-medium" data-testid={`link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}>
+                      <div className="text-sm text-muted-foreground hover:text-primary transition-colors hover-elevate px-2 py-1 rounded-xl inline-block font-medium cursor-pointer" data-testid={`link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}>
                         {link.label}
-                      </a>
+                      </div>
                     </Link>
                   </li>
                 ))}
@@ -53,10 +53,10 @@ export default function Footer() {
         <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <Link href="/">
-              <a className="flex items-center gap-2 text-xl font-bold text-primary" data-testid="link-footer-logo">
+              <div className="flex items-center gap-2 text-xl font-bold text-primary cursor-pointer" data-testid="link-footer-logo">
                 <SunLogo size={28} animate={false} />
                 Lumio
-              </a>
+              </div>
             </Link>
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} Lumio. All rights reserved.
