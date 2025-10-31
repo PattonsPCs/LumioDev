@@ -4,59 +4,60 @@ import ProductCard, { type Product } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import yellowHoodie from "@assets/generated_images/Yellow_hoodie_product_photo_259447ce.png";
-import magentaHoodie from "@assets/generated_images/Magenta_hoodie_product_photo_9165875a.png";
-import lavenderHoodie from "@assets/generated_images/Lavender_hoodie_product_photo_12aea468.png";
+import yellowHoodie from "@assets/IMG_9431_1761942244389.png";
+import sandHoodie from "@assets/IMG_9362_1761942225345.png";
+import coralHoodie from "@assets/IMG_9432_1761942244391.png";
+import SunBeams from "@/components/SunBeams";
 
 const allProducts: Product[] = [
   {
     id: "1",
-    name: "Citrus Glow Hoodie",
+    name: "Sunshine Hoodie",
     price: 89,
     image: yellowHoodie,
-    colors: ["#FFD54A", "#FF5A9E", "#D6C7FF"],
+    colors: ["#F0B429", "#F09B9B", "#E8D5B7"],
     inStock: true,
     isNew: true,
   },
   {
     id: "2",
-    name: "Berry Burst Hoodie",
+    name: "Coral Breeze Hoodie",
     price: 89,
-    image: magentaHoodie,
-    colors: ["#FF5A9E", "#FFD54A", "#D6C7FF"],
+    image: coralHoodie,
+    colors: ["#F09B9B", "#F0B429", "#E8D5B7"],
     inStock: true,
     isNew: true,
   },
   {
     id: "3",
-    name: "Lavender Dream Hoodie",
+    name: "Sandy Beach Hoodie",
     price: 89,
-    image: lavenderHoodie,
-    colors: ["#D6C7FF", "#FFD54A", "#FF5A9E"],
+    image: sandHoodie,
+    colors: ["#E8D5B7", "#F0B429", "#F09B9B"],
     inStock: true,
   },
   {
     id: "4",
-    name: "Sunset Edition Hoodie",
+    name: "Golden Hour Hoodie",
     price: 95,
     image: yellowHoodie,
-    colors: ["#FFD54A"],
+    colors: ["#F0B429"],
     inStock: true,
   },
   {
     id: "5",
-    name: "Midnight Berry Hoodie",
+    name: "Sunset Coral Hoodie",
     price: 95,
-    image: magentaHoodie,
-    colors: ["#FF5A9E"],
+    image: coralHoodie,
+    colors: ["#F09B9B"],
     inStock: false,
   },
   {
     id: "6",
-    name: "Twilight Lavender Hoodie",
+    name: "Island Sand Hoodie",
     price: 95,
-    image: lavenderHoodie,
-    colors: ["#D6C7FF"],
+    image: sandHoodie,
+    colors: ["#E8D5B7"],
     inStock: true,
   },
 ];
@@ -68,23 +69,24 @@ export default function Shop() {
 
   const colorFilters = [
     { label: "All Colors", value: "all", color: null },
-    { label: "Citrus Yellow", value: "yellow", color: "#FFD54A" },
-    { label: "Berry Magenta", value: "magenta", color: "#FF5A9E" },
-    { label: "Lavender", value: "lavender", color: "#D6C7FF" },
+    { label: "Golden Sun", value: "yellow", color: "#F0B429" },
+    { label: "Coral Pink", value: "coral", color: "#F09B9B" },
+    { label: "Sandy Beige", value: "sand", color: "#E8D5B7" },
   ];
 
   const filteredProducts = allProducts.filter((product) => {
     if (selectedColor === "all") return true;
     const colorMap: Record<string, string> = {
-      yellow: "#FFD54A",
-      magenta: "#FF5A9E",
-      lavender: "#D6C7FF",
+      yellow: "#F0B429",
+      coral: "#F09B9B",
+      sand: "#E8D5B7",
     };
     return product.colors.includes(colorMap[selectedColor]);
   });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <SunBeams className="opacity-10" />
       <div className="bg-gradient-to-br from-accent/30 to-background py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4" data-testid="text-shop-title">

@@ -27,25 +27,25 @@ export default function ProductCard({ product, onAddToCart, onClick }: ProductCa
     <motion.div
       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={shouldReduceMotion ? {} : { y: -6 }}
-      transition={{ duration: 0.3 }}
+      whileHover={shouldReduceMotion ? {} : { y: -8, scale: 1.02 }}
+      transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
       data-testid={`card-product-${product.id}`}
     >
-      <Card className="overflow-hidden group cursor-pointer hover-elevate" onClick={onClick}>
+      <Card className="overflow-hidden group cursor-pointer hover-elevate rounded-3xl shadow-lg hover:shadow-2xl transition-shadow" onClick={onClick}>
         <div className="relative aspect-[3/4] overflow-hidden bg-muted">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
             data-testid={`img-product-${product.id}`}
           />
           {product.isNew && (
-            <Badge className="absolute top-3 left-3" data-testid={`badge-new-${product.id}`}>
+            <Badge className="absolute top-3 left-3 rounded-full shadow-lg" data-testid={`badge-new-${product.id}`}>
               New
             </Badge>
           )}
           {!product.inStock && (
-            <Badge variant="secondary" className="absolute top-3 left-3">
+            <Badge variant="secondary" className="absolute top-3 left-3 rounded-full">
               Out of Stock
             </Badge>
           )}
@@ -65,9 +65,9 @@ export default function ProductCard({ product, onAddToCart, onClick }: ProductCa
             {product.colors.map((color, index) => (
               <motion.div
                 key={index}
-                className="w-6 h-6 rounded-full border-2 border-border cursor-pointer"
+                className="w-8 h-8 rounded-full border-2 border-white shadow-md cursor-pointer"
                 style={{ backgroundColor: color }}
-                whileHover={shouldReduceMotion ? {} : { scale: 1.2, rotate: 15 }}
+                whileHover={shouldReduceMotion ? {} : { scale: 1.3, y: -4 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
                 data-testid={`color-swatch-${product.id}-${index}`}
               />
@@ -75,7 +75,7 @@ export default function ProductCard({ product, onAddToCart, onClick }: ProductCa
           </div>
 
           <Button
-            className="w-full gap-2"
+            className="w-full gap-2 rounded-full shadow-md hover:shadow-lg transition-shadow"
             disabled={!product.inStock}
             onClick={(e) => {
               e.stopPropagation();

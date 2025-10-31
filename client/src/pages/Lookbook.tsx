@@ -1,22 +1,25 @@
 import { motion, useReducedMotion } from "framer-motion";
 import LookbookCard from "@/components/LookbookCard";
-import lookbookYellow from "@assets/generated_images/Lookbook_editorial_photo_yellow_1a515cdc.png";
-import lookbookMagenta from "@assets/generated_images/Lookbook_editorial_photo_magenta_7eccdd9e.png";
+import SunBeams from "@/components/SunBeams";
+import lookbookYellow from "@assets/Tropical realistic on beach_1761942261349.png";
+import lookbookCoral from "@assets/Berries realistic on beach_1761942261350.png";
+import lookbookBeach from "@assets/citrus realisic on beach_1761942261352.png";
 
 const lookbookItems = [
-  { id: 1, image: lookbookYellow, title: "Urban Sunset" },
-  { id: 2, image: lookbookMagenta, title: "Street Vibrance" },
-  { id: 3, image: lookbookYellow, title: "Golden Hour" },
-  { id: 4, image: lookbookMagenta, title: "City Lights" },
-  { id: 5, image: lookbookYellow, title: "Weekend Vibes" },
-  { id: 6, image: lookbookMagenta, title: "Night Out" },
+  { id: 1, image: lookbookYellow, title: "Tropical Vibes" },
+  { id: 2, image: lookbookCoral, title: "Berry Sunset" },
+  { id: 3, image: lookbookBeach, title: "Beach Days" },
+  { id: 4, image: lookbookCoral, title: "Island Life" },
+  { id: 5, image: lookbookYellow, title: "Golden Hour" },
+  { id: 6, image: lookbookBeach, title: "Ocean Breeze" },
 ];
 
 export default function Lookbook() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <SunBeams className="opacity-10" />
       <div className="bg-gradient-to-br from-accent/30 to-background py-16">
         <div className="container mx-auto px-4 text-center">
           <motion.h1

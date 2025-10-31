@@ -5,25 +5,26 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductCard, { type Product } from "@/components/ProductCard";
 import { ShoppingCart, Star } from "lucide-react";
-import yellowHoodie from "@assets/generated_images/Yellow_hoodie_product_photo_259447ce.png";
-import magentaHoodie from "@assets/generated_images/Magenta_hoodie_product_photo_9165875a.png";
-import lavenderHoodie from "@assets/generated_images/Lavender_hoodie_product_photo_12aea468.png";
+import SunBeams from "@/components/SunBeams";
+import yellowHoodie from "@assets/IMG_9431_1761942244389.png";
+import sandHoodie from "@assets/IMG_9362_1761942225345.png";
+import coralHoodie from "@assets/IMG_9432_1761942244391.png";
 
 const relatedProducts: Product[] = [
   {
     id: "2",
-    name: "Berry Burst Hoodie",
+    name: "Coral Breeze Hoodie",
     price: 89,
-    image: magentaHoodie,
-    colors: ["#FF5A9E", "#FFD54A", "#D6C7FF"],
+    image: coralHoodie,
+    colors: ["#F09B9B", "#F0B429", "#E8D5B7"],
     inStock: true,
   },
   {
     id: "3",
-    name: "Lavender Dream Hoodie",
+    name: "Sandy Beach Hoodie",
     price: 89,
-    image: lavenderHoodie,
-    colors: ["#D6C7FF", "#FFD54A", "#FF5A9E"],
+    image: sandHoodie,
+    colors: ["#E8D5B7", "#F0B429", "#F09B9B"],
     inStock: true,
   },
 ];
@@ -31,17 +32,18 @@ const relatedProducts: Product[] = [
 export default function Product() {
   const shouldReduceMotion = useReducedMotion();
   const [selectedSize, setSelectedSize] = useState("M");
-  const [selectedColor, setSelectedColor] = useState("#FFD54A");
+  const [selectedColor, setSelectedColor] = useState("#F0B429");
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
   const colors = [
-    { hex: "#FFD54A", name: "Citrus Yellow" },
-    { hex: "#FF5A9E", name: "Berry Magenta" },
-    { hex: "#D6C7FF", name: "Lavender" },
+    { hex: "#F0B429", name: "Golden Sun" },
+    { hex: "#F09B9B", name: "Coral Pink" },
+    { hex: "#E8D5B7", name: "Sandy Beige" },
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <SunBeams className="opacity-10" />
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-12 mb-16">
           <motion.div
@@ -52,7 +54,7 @@ export default function Product() {
             <div className="aspect-[3/4] rounded-lg overflow-hidden bg-muted sticky top-24">
               <img
                 src={yellowHoodie}
-                alt="Citrus Glow Hoodie"
+                alt="Sunshine Hoodie"
                 className="w-full h-full object-cover"
                 data-testid="img-product-main"
               />
@@ -68,7 +70,7 @@ export default function Product() {
             <div>
               <Badge className="mb-3" data-testid="badge-new-arrival">New Arrival</Badge>
               <h1 className="text-4xl font-bold mb-2" data-testid="text-product-name">
-                Citrus Glow Hoodie
+                Sunshine Hoodie
               </h1>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">

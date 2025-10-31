@@ -1,7 +1,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import heroImage from "@assets/generated_images/Hero_image_three_models_634e2247.png";
+import { ArrowRight, Sun } from "lucide-react";
+import SunLogo from "./SunLogo";
+import SunBeams from "./SunBeams";
+import heroImage from "@assets/citrus berries tropical Lumio light up your day_1761942261351.png";
 
 interface HeroProps {
   onShopClick?: () => void;
@@ -13,8 +15,18 @@ export default function Hero({ onShopClick }: HeroProps) {
   const springConfig = { stiffness: 120, damping: 14 };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-accent/20 to-background min-h-[85vh] flex items-center">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background pointer-events-none" />
+    <section className="relative overflow-hidden bg-gradient-to-br from-accent/40 via-background to-secondary/20 min-h-[85vh] flex items-center">
+      <SunBeams className="opacity-30" />
+      
+      <motion.div
+        className="absolute top-20 right-20 hidden lg:block"
+        animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+        transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+      >
+        <SunLogo size={120} animate={true} />
+      </motion.div>
+      
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background pointer-events-none" />
       
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -39,7 +51,7 @@ export default function Hero({ onShopClick }: HeroProps) {
               data-testid="text-hero-title"
             >
               Light Up <br />
-              <span className="text-primary">Your Day.</span>
+              <span className="text-primary drop-shadow-lg">Your Day.</span>
             </motion.h1>
 
             <motion.p
@@ -60,7 +72,7 @@ export default function Hero({ onShopClick }: HeroProps) {
             >
               <Button
                 size="lg"
-                className="gap-2"
+                className="gap-2 rounded-full shadow-lg hover:shadow-xl transition-shadow"
                 onClick={onShopClick}
                 data-testid="button-shop-now"
               >
@@ -69,6 +81,7 @@ export default function Hero({ onShopClick }: HeroProps) {
               <Button
                 size="lg"
                 variant="outline"
+                className="rounded-full"
                 data-testid="button-view-lookbook"
               >
                 View Lookbook
@@ -102,10 +115,10 @@ export default function Hero({ onShopClick }: HeroProps) {
             transition={shouldReduceMotion ? {} : { delay: 0.3, duration: 0.8, ...springConfig }}
             className="relative"
           >
-            <div className="aspect-[16/10] rounded-lg overflow-hidden shadow-2xl">
+            <div className="aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <img
                 src={heroImage}
-                alt="Three models wearing Lumio hoodies on rooftop at dusk"
+                alt="Lumio cans - tropical mood-boosting functional drinks on beach"
                 className="w-full h-full object-cover"
                 data-testid="img-hero"
               />
