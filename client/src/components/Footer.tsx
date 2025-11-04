@@ -75,6 +75,21 @@ export default function Footer() {
             </Button>
           </div>
         </div>
+
+        <div className="border-t pt-4 mt-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            Made by{" "}
+            <a
+              href="https://pattonpcs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium transition-colors"
+              data-testid="link-pattopcs"
+            >
+              PattonPcs.com
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
