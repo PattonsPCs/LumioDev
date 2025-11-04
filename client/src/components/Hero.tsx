@@ -120,6 +120,8 @@ export default function Hero({ onShopClick }: HeroProps) {
                 src={heroImage}
                 alt="Lumio cans - tropical mood-boosting functional drinks on beach"
                 className="w-full h-full object-cover"
+                loading="eager"
+                fetchPriority="high"
                 data-testid="img-hero"
               />
             </div>

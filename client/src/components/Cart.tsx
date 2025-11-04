@@ -84,6 +84,8 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                           src={item.image}
                           alt={item.name}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                           data-testid={`cart-item-img-${item.id}`}
                         />
                       </div>

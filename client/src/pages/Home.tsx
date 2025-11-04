@@ -1,51 +1,39 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import Hero from "@/components/Hero";
-import ProductCard, { type Product } from "@/components/ProductCard";
+import ProductCard from "@/components/ProductCard";
 import LookbookCard from "@/components/LookbookCard";
 import NewsletterModal from "@/components/NewsletterModal";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Package, RefreshCw } from "lucide-react";
 import SunBeams from "@/components/SunBeams";
 import SunLogo from "@/components/SunLogo";
-import yellowHoodie from "@assets/IMG_9431_1761942244389.png";
-import sandHoodie from "@assets/IMG_9362_1761942225345.png";
-import coralHoodie from "@assets/IMG_9432_1761942244391.png";
+import { featuredProducts } from "@/data/products";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 import lookbookYellow from "@assets/Tropical realistic on beach_1761942261349.png";
 import lookbookCoral from "@assets/Berries realistic on beach_1761942261350.png";
-
-const featuredProducts: Product[] = [
-  {
-    id: "1",
-    name: "Sunshine Hoodie",
-    price: 89,
-    image: yellowHoodie,
-    colors: ["#F0B429", "#F09B9B", "#E8D5B7"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "2",
-    name: "Coral Breeze Hoodie",
-    price: 89,
-    image: coralHoodie,
-    colors: ["#F09B9B", "#F0B429", "#E8D5B7"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "3",
-    name: "Sandy Beach Hoodie",
-    price: 89,
-    image: sandHoodie,
-    colors: ["#E8D5B7", "#F0B429", "#F09B9B"],
-    inStock: true,
-  },
-];
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const [showNewsletter, setShowNewsletter] = useState(false);
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = (product: { id: string; name: string; price: number; image: string }) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: "M",
+      color: "Default",
+    });
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
 
   return (
     <div className="min-h-screen relative">
@@ -67,7 +55,7 @@ export default function Home() {
             <ProductCard
               key={product.id}
               product={product}
-              onAddToCart={(p) => console.log("Add to cart:", p.name)}
+              onAddToCart={handleAddToCart}
               onClick={() => setLocation(`/product/${product.id}`)}
             />
           ))}

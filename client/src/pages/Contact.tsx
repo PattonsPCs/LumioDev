@@ -1,23 +1,20 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail, MessageSquare, Clock } from "lucide-react";
-import { useState } from "react";
+import { ExternalLink } from "lucide-react";
+import SunBeams from "@/components/SunBeams";
+
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSch78o9b6XSmqpeQz6thqp3jKid-J76tz5DoNnCRgGeHuC4iA/viewform?usp=header";
 
 export default function Contact() {
   const shouldReduceMotion = useReducedMotion();
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Contact form submitted:", formData);
-    setFormData({ name: "", email: "", message: "" });
+  const handleOpenForm = () => {
+    window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <SunBeams className="opacity-10" />
       <div className="bg-gradient-to-br from-accent/30 to-background py-16">
         <div className="container mx-auto px-4 text-center">
           <motion.h1
@@ -27,7 +24,7 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
             data-testid="text-contact-title"
           >
-            Get in Touch
+            Lumio Early Access & Feedback Survey
           </motion.h1>
           <motion.p
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
@@ -35,104 +32,48 @@ export default function Contact() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Have a question? We'd love to hear from you.
+            Thank you for your interest! Fill out this survey to sign up for early access and share your feedback. Your input will help us improve and deliver a better experience.
           </motion.p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
-          <Card>
-            <CardContent className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Mail className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold">Email Us</h3>
-              <p className="text-sm text-muted-foreground">support@lumio.com</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <MessageSquare className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold">Live Chat</h3>
-              <p className="text-sm text-muted-foreground">Available Mon-Fri</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Clock className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold">Response Time</h3>
-              <p className="text-sm text-muted-foreground">Within 24 hours</p>
-            </CardContent>
-          </Card>
-        </div>
-
         <motion.div
-          className="max-w-2xl mx-auto"
+          className="max-w-2xl mx-auto text-center space-y-8"
           initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card>
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Send us a message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Name
-                  </label>
-                  <Input
-                    id="name"
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    data-testid="input-name"
-                  />
-                </div>
+          <div className="space-y-4">
+            <p className="text-muted-foreground">
+              Click the button below to open the survey in a new tab. Your feedback helps us create better products for you.
+            </p>
+          </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    data-testid="input-email"
-                  />
-                </div>
+          <Button
+            size="lg"
+            className="gap-2 rounded-full shadow-lg hover:shadow-xl transition-shadow text-lg px-8 py-6"
+            onClick={handleOpenForm}
+            data-testid="button-open-form"
+          >
+            <ExternalLink className="h-5 w-5" />
+            Open Survey Form
+          </Button>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    placeholder="How can we help you?"
-                    rows={6}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
-                    data-testid="textarea-message"
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="w-full" data-testid="button-submit">
-                  Send Message
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <div className="pt-8">
+            <p className="text-sm text-muted-foreground">
+              If the form doesn't open automatically,{" "}
+              <a
+                href={GOOGLE_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline font-medium"
+              >
+                click here
+              </a>
+              .
+            </p>
+          </div>
         </motion.div>
       </div>
     </div>

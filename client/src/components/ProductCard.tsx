@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ export interface Product {
   colors: string[];
   inStock: boolean;
   isNew?: boolean;
+  description?: string;
 }
 
 interface ProductCardProps {
@@ -20,7 +22,7 @@ interface ProductCardProps {
   onClick?: () => void;
 }
 
-export default function ProductCard({ product, onAddToCart, onClick }: ProductCardProps) {
+function ProductCard({ product, onAddToCart, onClick }: ProductCardProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -37,6 +39,8 @@ export default function ProductCard({ product, onAddToCart, onClick }: ProductCa
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
+            loading="lazy"
+            decoding="async"
             data-testid={`img-product-${product.id}`}
           />
           {product.isNew && (
@@ -91,3 +95,5 @@ export default function ProductCard({ product, onAddToCart, onClick }: ProductCa
     </motion.div>
   );
 }
+
+export default memo(ProductCard);

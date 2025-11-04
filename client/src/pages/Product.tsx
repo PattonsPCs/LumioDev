@@ -1,45 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRoute, useLocation } from "wouter";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductCard, { type Product } from "@/components/ProductCard";
+import ProductCard from "@/components/ProductCard";
 import { ShoppingCart, Star } from "lucide-react";
 import SunBeams from "@/components/SunBeams";
-import yellowHoodie from "@assets/IMG_9431_1761942244389.png";
-import sandHoodie from "@assets/IMG_9362_1761942225345.png";
-import coralHoodie from "@assets/IMG_9432_1761942244391.png";
-
-const relatedProducts: Product[] = [
-  {
-    id: "2",
-    name: "Coral Breeze Hoodie",
-    price: 89,
-    image: coralHoodie,
-    colors: ["#F09B9B", "#F0B429", "#E8D5B7"],
-    inStock: true,
-  },
-  {
-    id: "3",
-    name: "Sandy Beach Hoodie",
-    price: 89,
-    image: sandHoodie,
-    colors: ["#E8D5B7", "#F0B429", "#F09B9B"],
-    inStock: true,
-  },
-];
+import { getProductById, getRelatedProducts } from "@/data/products";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import NotFound from "./not-found";
 
 export default function Product() {
   const shouldReduceMotion = useReducedMotion();
+  const [, params] = useRoute("/product/:id");
+  const [, setLocation] = useLocation();
+  const productId = params?.id || "";
+  const product = getProductById(productId);
+  
   const [selectedSize, setSelectedSize] = useState("M");
-  const [selectedColor, setSelectedColor] = useState("#F0B429");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (product && product.colors.length > 0) {
+      setSelectedColor(product.colors[0]);
+    }
+  }, [product]);
+
+  if (!product) {
+    return <NotFound />;
+  }
+
+  const relatedProducts = getRelatedProducts(productId);
+
+  const handleAddToCart = () => {
+    const colorName = product.colors.findIndex((c) => c === selectedColor) >= 0
+      ? `Color ${product.colors.indexOf(selectedColor) + 1}`
+      : "Default";
+    
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: selectedSize,
+      color: colorName,
+    });
+    
+    toast({
+      title: "Added to cart",
+      description: `${product.name} (${selectedSize}, ${colorName}) has been added to your cart.`,
+    });
+  };
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
-  const colors = [
-    { hex: "#F0B429", name: "Golden Sun" },
-    { hex: "#F09B9B", name: "Coral Pink" },
-    { hex: "#E8D5B7", name: "Sandy Beige" },
-  ];
+  const colors = product.colors.map((hex, index) => ({
+    hex,
+    name: index === 0 ? "Golden Sun" : index === 1 ? "Coral Pink" : "Sandy Beige",
+  }));
 
   return (
     <div className="min-h-screen relative">
@@ -53,9 +74,11 @@ export default function Product() {
           >
             <div className="aspect-[3/4] rounded-lg overflow-hidden bg-muted sticky top-24">
               <img
-                src={yellowHoodie}
-                alt="Sunshine Hoodie"
+                src={product.image}
+                alt={product.name}
                 className="w-full h-full object-cover"
+                loading="eager"
+                fetchPriority="high"
                 data-testid="img-product-main"
               />
             </div>
@@ -68,9 +91,9 @@ export default function Product() {
             className="space-y-6"
           >
             <div>
-              <Badge className="mb-3" data-testid="badge-new-arrival">New Arrival</Badge>
+              {product.isNew && <Badge className="mb-3" data-testid="badge-new-arrival">New Arrival</Badge>}
               <h1 className="text-4xl font-bold mb-2" data-testid="text-product-name">
-                Sunshine Hoodie
+                {product.name}
               </h1>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">
@@ -81,13 +104,12 @@ export default function Product() {
                 <span className="text-sm text-muted-foreground">(42 reviews)</span>
               </div>
               <p className="text-3xl font-bold text-primary" data-testid="text-product-price">
-                $89.00
+                ${product.price}.00
               </p>
             </div>
 
             <p className="text-muted-foreground leading-relaxed" data-testid="text-product-description">
-              Heavyweight comfort with a photogenic pop. 350gsm brushed fleece, reinforced seams, true-to-size. 
-              Machine wash cold. Free returns. Each hoodie is designed to make you stand out with bold colors and premium quality.
+              {product.description || "Heavyweight comfort with a photogenic pop. 350gsm brushed fleece, reinforced seams, true-to-size. Machine wash cold. Free returns."}
             </p>
 
             <div className="space-y-4">
@@ -132,11 +154,12 @@ export default function Product() {
               <Button
                 size="lg"
                 className="w-full gap-2"
-                onClick={() => console.log("Added to cart:", { selectedSize, selectedColor })}
+                onClick={handleAddToCart}
+                disabled={!product.inStock}
                 data-testid="button-add-to-cart"
               >
                 <ShoppingCart className="h-5 w-5" />
-                Add to Cart
+                {product.inStock ? "Add to Cart" : "Out of Stock"}
               </Button>
               <Button size="lg" variant="outline" className="w-full" data-testid="button-size-guide">
                 View Size Guide
@@ -184,12 +207,25 @@ export default function Product() {
         <div>
           <h2 className="text-3xl font-bold mb-8" data-testid="text-related-title">You Might Also Like</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedProducts.map((product) => (
+            {relatedProducts.map((relatedProduct) => (
               <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={(p) => console.log("Add to cart:", p.name)}
-                onClick={() => console.log("Product clicked:", product.id)}
+                key={relatedProduct.id}
+                product={relatedProduct}
+                onAddToCart={(p) => {
+                  addToCart({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    image: p.image,
+                    size: "M",
+                    color: "Default",
+                  });
+                  toast({
+                    title: "Added to cart",
+                    description: `${p.name} has been added to your cart.`,
+                  });
+                }}
+                onClick={() => setLocation(`/product/${relatedProduct.id}`)}
               />
             ))}
           </div>
