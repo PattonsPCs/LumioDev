@@ -1,12 +1,13 @@
-import { Client, Environment } from "square";
+import { SquareClient, SquareEnvironment, Square } from "square";
 
-function determineEnvironment() {
+type SupportedEnvironment = "production" | "sandbox";
+
+function determineEnvironment(): SupportedEnvironment {
   const vercelEnv = process.env.VERCEL_ENV;
   if (vercelEnv) {
     return vercelEnv === "production" ? "production" : "sandbox";
   }
 
-  // Local dev / other hosts
   return process.env.NODE_ENV === "production" ? "production" : "sandbox";
 }
 
@@ -27,22 +28,22 @@ if (!accessToken) {
   );
 }
 
-export const squareClient = new Client({
-  accessToken,
-  environment: environment === "production" ? Environment.Production : Environment.Sandbox,
+export const squareClient = new SquareClient({
+  token: accessToken,
+  environment:
+    environment === "production" ? SquareEnvironment.Production : SquareEnvironment.Sandbox,
 });
 
-let cachedLocationId: string | null = null;
+let cachedLocationId: string | undefined;
 
 export async function resolveSquareLocationId(): Promise<string> {
   if (cachedLocationId) {
     return cachedLocationId;
   }
 
-  const { locationsApi } = squareClient;
-  const response = await locationsApi.listLocations();
-
-  const location = response.result.locations?.[0];
+  const response = await squareClient.locations.list();
+  const locations = (response.data as Square.ListLocationsResponse).locations;
+  const location = locations?.find((loc) => loc.status === "ACTIVE") ?? locations?.[0];
 
   if (!location?.id) {
     throw new Error(

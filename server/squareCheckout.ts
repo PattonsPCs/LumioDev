@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { ApiError } from "square";
+import { SquareError, Square } from "square";
 import { squareClient, resolveSquareLocationId } from "./squareClient";
 import { getProductById } from "./products";
 
@@ -42,17 +42,20 @@ export async function createSquareCheckoutLink(
   const shipping = subtotal >= 50 ? 0 : 10;
   const locationId = await resolveSquareLocationId();
 
-  const lineItems = validatedItems.map((item) => ({
-    name: item.product.name,
-    quantity: item.quantity.toString(),
-    basePriceMoney: {
-      amount: BigInt(Math.round(item.product.price * 100)),
-      currency: "USD",
-    },
-  }));
+  const order: Square.Order = {
+    locationId,
+    lineItems: validatedItems.map((item) => ({
+      name: item.product.name,
+      quantity: item.quantity.toString(),
+      basePriceMoney: {
+        amount: BigInt(Math.round(item.product.price * 100)),
+        currency: "USD",
+      },
+    })),
+  };
 
   if (shipping > 0) {
-    lineItems.push({
+    order.lineItems?.push({
       name: "Shipping",
       quantity: "1",
       basePriceMoney: {
@@ -66,28 +69,23 @@ export async function createSquareCheckoutLink(
     process.env.SQUARE_CHECKOUT_REDIRECT_URL || process.env.PUBLIC_SITE_URL || undefined;
 
   try {
-    const response = await squareClient.checkoutApi.createPaymentLink({
+    const response = await squareClient.checkout.paymentLinks.create({
       idempotencyKey: randomUUID(),
-      order: {
-        locationId,
-        lineItems,
-      },
-      checkoutOptions: {
-        redirectUrl,
-      },
+      order,
+      checkoutOptions: redirectUrl ? { redirectUrl } : undefined,
     });
 
-    const url = response.result.paymentLink?.url;
+    const url = response.data.paymentLink?.url ?? undefined;
     if (!url) {
       throw new Error("Square did not return a payment link URL.");
     }
 
     return { url };
   } catch (error) {
-    if (error instanceof ApiError) {
-      const firstError = error.result?.errors?.[0];
-      const details = firstError?.detail || firstError?.category || error.message;
-      throw new Error(details || "Square reported an error while creating the checkout link.");
+    if (error instanceof SquareError) {
+      const firstError = error.errors[0];
+      const detail = firstError?.detail || firstError?.category || error.message;
+      throw new Error(detail || "Square reported an error while creating the checkout link.");
     }
     throw error;
   }
