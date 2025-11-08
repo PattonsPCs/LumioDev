@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X, Minus, Plus, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -20,9 +20,18 @@ interface CartProps {
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
   onCheckout?: () => void;
+  isProcessingCheckout?: boolean;
 }
 
-export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }: CartProps) {
+export default function Cart({
+  isOpen,
+  onClose,
+  items,
+  onUpdateQuantity,
+  onRemove,
+  onCheckout,
+  isProcessingCheckout = false,
+}: CartProps) {
   const shouldReduceMotion = useReducedMotion();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = subtotal >= 50 ? 0 : 10;
@@ -160,9 +169,19 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg" onClick={onCheckout} data-testid="button-checkout">
-                  Checkout
+                <Button
+                  className="w-full gap-2"
+                  size="lg"
+                  onClick={onCheckout}
+                  disabled={isProcessingCheckout || items.length === 0}
+                  data-testid="button-checkout"
+                >
+                  {isProcessingCheckout && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {isProcessingCheckout ? "Redirecting..." : "Checkout"}
                 </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Secure checkout is powered by Square.
+                </p>
               </div>
             )}
           </motion.div>
