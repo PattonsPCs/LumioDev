@@ -16,14 +16,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.status(200).json({ url });
   } catch (error) {
     console.error("Square checkout error", error);
-    const statusCode =
-      error instanceof Error && /cart|product/i.test(error.message) ? 400 : 500;
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "We were unable to create a checkout link.";
+    const statusCode = /cart|product/i.test(message) ? 400 : 500;
 
     res.status(statusCode).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : "We were unable to create a checkout link.",
+      message,
     });
   }
 }

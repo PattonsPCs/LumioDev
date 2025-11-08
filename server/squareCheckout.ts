@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { ApiError } from "square";
 import { squareClient, resolveSquareLocationId } from "./squareClient";
 import { getProductById } from "./products";
 
@@ -64,22 +65,31 @@ export async function createSquareCheckoutLink(
   const redirectUrl =
     process.env.SQUARE_CHECKOUT_REDIRECT_URL || process.env.PUBLIC_SITE_URL || undefined;
 
-  const response = await squareClient.checkoutApi.createPaymentLink({
-    idempotencyKey: randomUUID(),
-    order: {
-      locationId,
-      lineItems,
-    },
-    checkoutOptions: {
-      redirectUrl,
-    },
-  });
+  try {
+    const response = await squareClient.checkoutApi.createPaymentLink({
+      idempotencyKey: randomUUID(),
+      order: {
+        locationId,
+        lineItems,
+      },
+      checkoutOptions: {
+        redirectUrl,
+      },
+    });
 
-  const url = response.result.paymentLink?.url;
-  if (!url) {
-    throw new Error("Square did not return a payment link URL.");
+    const url = response.result.paymentLink?.url;
+    if (!url) {
+      throw new Error("Square did not return a payment link URL.");
+    }
+
+    return { url };
+  } catch (error) {
+    if (error instanceof ApiError) {
+      const firstError = error.result?.errors?.[0];
+      const details = firstError?.detail || firstError?.category || error.message;
+      throw new Error(details || "Square reported an error while creating the checkout link.");
+    }
+    throw error;
   }
-
-  return { url };
 }
 

@@ -12,6 +12,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { url } = await createSquareCheckoutLink(items ?? []);
       res.json({ url });
     } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "We were unable to create a checkout link.";
+      const statusCode = /cart|product/i.test(message) ? 400 : 500;
+
+      res.status(statusCode).json({ message });
       next(error);
     }
   });
