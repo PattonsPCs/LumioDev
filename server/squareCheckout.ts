@@ -69,13 +69,13 @@ export async function createSquareCheckoutLink(
     process.env.SQUARE_CHECKOUT_REDIRECT_URL || process.env.PUBLIC_SITE_URL || undefined;
 
   try {
-    const response = await squareClient.checkout.paymentLinks.create({
+    const response = (await squareClient.checkout.paymentLinks.create({
       idempotencyKey: randomUUID(),
       order,
       checkoutOptions: redirectUrl ? { redirectUrl } : undefined,
-    });
+    })) as Square.CreatePaymentLinkResponse;
 
-    const url = response.data.paymentLink?.url ?? undefined;
+    const url = response.paymentLink?.url ?? undefined;
     if (!url) {
       throw new Error("Square did not return a payment link URL.");
     }

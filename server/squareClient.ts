@@ -41,8 +41,8 @@ export async function resolveSquareLocationId(): Promise<string> {
     return cachedLocationId;
   }
 
-  const response = await squareClient.locations.list();
-  const locations = (response.data as Square.ListLocationsResponse).locations;
+  const response = (await squareClient.locations.list()) as Square.ListLocationsResponse;
+  const locations = response.locations;
   const location = locations?.find((loc) => loc.status === "ACTIVE") ?? locations?.[0];
 
   if (!location?.id) {
