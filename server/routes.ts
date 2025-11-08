@@ -1,6 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { createSquareCheckoutLink } from "./squareCheckout";
+import { createSquareCheckoutLink } from "./squareCheckout.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/square/checkout-link", async (req: Request, res: Response, next: NextFunction) => {

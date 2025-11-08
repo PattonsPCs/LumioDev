@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { createSquareCheckoutLink } from "../../server/squareCheckout";
+import { createSquareCheckoutLink } from "../../server/squareCheckout.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
@@ -23,9 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         : "We were unable to create a checkout link.";
     const statusCode = /cart|product/i.test(message) ? 400 : 500;
 
-    res.status(statusCode).json({
-      message,
-    });
+    res.status(statusCode).json({ message });
   }
 }
 

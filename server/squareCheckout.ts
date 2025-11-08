@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { SquareError, Square } from "square";
-import { squareClient, resolveSquareLocationId } from "./squareClient";
+import { squareClient, resolveSquareLocationId } from "./squareClient.js";
 import { getProductById } from "./products";
 
 interface CheckoutItemInput {
