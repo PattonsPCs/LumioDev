@@ -115,10 +115,16 @@ async function createSquareCheckoutLink(
     throw new Error("Cart is empty.");
   }
 
-  const normalizedItems = rawItems.map((item) => ({
-    id: String(item.id),
-    quantity: Number(item.quantity) || 0,
-  }));
+  // Extract base product ID from cart item IDs (format: "productId-size-color" or just "productId")
+  const normalizedItems = rawItems.map((item) => {
+    const itemId = String(item.id);
+    // Cart items have IDs like "2-M-Default", extract just the product ID part
+    const baseProductId = itemId.split('-')[0];
+    return {
+      id: baseProductId,
+      quantity: Number(item.quantity) || 0,
+    };
+  });
 
   const validatedItems = normalizedItems.map((item) => {
     const product = getProductById(item.id);
