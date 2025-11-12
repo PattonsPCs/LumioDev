@@ -85,8 +85,10 @@ export default function Cart({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.2 }}
                       className="flex gap-4"
                       data-testid={`cart-item-${item.id}`}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <div className="w-20 h-20 rounded-md overflow-hidden bg-muted flex-shrink-0">
                         <img
@@ -115,7 +117,10 @@ export default function Cart({
                             variant="outline"
                             size="icon"
                             className="h-7 w-7"
-                            onClick={() => onUpdateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onUpdateQuantity(item.id, Math.max(0, item.quantity - 1));
+                            }}
                             data-testid={`button-decrease-${item.id}`}
                           >
                             <Minus className="h-3 w-3" />
@@ -127,7 +132,10 @@ export default function Cart({
                             variant="outline"
                             size="icon"
                             className="h-7 w-7"
-                            onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onUpdateQuantity(item.id, item.quantity + 1);
+                            }}
                             data-testid={`button-increase-${item.id}`}
                           >
                             <Plus className="h-3 w-3" />
@@ -135,7 +143,11 @@ export default function Cart({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => onRemove(item.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              onRemove(item.id);
+                            }}
                             className="ml-auto text-destructive"
                             data-testid={`button-remove-${item.id}`}
                           >
