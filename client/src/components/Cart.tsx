@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,31 +34,49 @@ export default function Cart({
   isProcessingCheckout = false,
 }: CartProps) {
   const shouldReduceMotion = useReducedMotion();
+  const [overlayVisible, setOverlayVisible] = useState(false);
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = subtotal >= 50 ? 0 : 10;
   const total = subtotal + shipping;
 
+  useEffect(() => {
+    if (isOpen) {
+      setOverlayVisible(true);
+    }
+  }, [isOpen]);
+
+  const handleOverlayAnimationComplete = () => {
+    if (!isOpen) {
+      setOverlayVisible(false);
+    }
+  };
+
   return (
     <AnimatePresence>
-      {isOpen && (
+      {(isOpen || overlayVisible) && (
         <>
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: isOpen ? 1 : 0 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            transition={{ duration: 0.2 }}
+            onAnimationComplete={handleOverlayAnimationComplete}
+            onClick={isOpen ? onClose : undefined}
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
             data-testid="cart-overlay"
+            style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
           />
 
-          <motion.div
-            initial={shouldReduceMotion ? { opacity: 0 } : { x: "100%" }}
-            animate={shouldReduceMotion ? { opacity: 1 } : { x: 0 }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { x: "100%" }}
-            transition={{ type: "spring", stiffness: 120, damping: 14 }}
-            className="fixed right-0 top-0 h-full w-full sm:w-96 bg-card border-l shadow-2xl z-50 flex flex-col"
-            data-testid="cart-panel"
-          >
+          {isOpen && (
+            <motion.div
+              initial={shouldReduceMotion ? { opacity: 0 } : { x: "100%" }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { x: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { x: "100%" }}
+              transition={{ type: "spring", stiffness: 120, damping: 14 }}
+              className="fixed right-0 top-0 h-full w-full sm:w-96 bg-card border-l shadow-2xl z-50 flex flex-col"
+              data-testid="cart-panel"
+              onClick={(e) => e.stopPropagation()}
+            >
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-2xl font-bold" data-testid="text-cart-title">
                 Your Cart
@@ -196,7 +215,8 @@ export default function Cart({
                 </p>
               </div>
             )}
-          </motion.div>
+            </motion.div>
+          )}
         </>
       )}
     </AnimatePresence>
