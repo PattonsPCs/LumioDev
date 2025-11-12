@@ -11,6 +11,7 @@ import SunLogo from "@/components/SunLogo";
 import { featuredProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { getPriceBySize } from "@/lib/utils";
 import lookbookYellow from "@assets/Tropical realistic on beach_1761942261349.png";
 import lookbookCoral from "@assets/Berries realistic on beach_1761942261350.png";
 
@@ -21,10 +22,12 @@ export default function Home() {
   const { toast } = useToast();
 
   const handleAddToCart = (product: { id: string; name: string; price: number; image: string }) => {
+    // Default size is M, which costs $60
+    const defaultPrice = getPriceBySize("M");
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: defaultPrice,
       image: product.image,
       size: "M",
       color: "Default",
@@ -51,14 +54,22 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {featuredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAddToCart={handleAddToCart}
-              onClick={() => setLocation(`/product/${product.id}`)}
-            />
-          ))}
+          {featuredProducts.map((product) => {
+            // Use default price of $60 (size M) for display
+            const defaultPrice = getPriceBySize("M");
+            const productWithDefaultPrice = {
+              ...product,
+              price: defaultPrice,
+            };
+            return (
+              <ProductCard
+                key={product.id}
+                product={productWithDefaultPrice}
+                onAddToCart={handleAddToCart}
+                onClick={() => setLocation(`/product/${product.id}`)}
+              />
+            );
+          })}
         </div>
 
         <div className="text-center">

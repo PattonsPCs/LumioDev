@@ -210,27 +210,35 @@ export default function Product() {
         <div>
           <h2 className="text-3xl font-bold mb-8" data-testid="text-related-title">You Might Also Like</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedProducts.map((relatedProduct) => (
-              <ProductCard
-                key={relatedProduct.id}
-                product={relatedProduct}
-                onAddToCart={(p) => {
-                  addToCart({
-                    id: p.id,
-                    name: p.name,
-                    price: p.price,
-                    image: p.image,
-                    size: "M",
-                    color: "Default",
-                  });
-                  toast({
-                    title: "Added to cart",
-                    description: `${p.name} has been added to your cart.`,
-                  });
-                }}
-                onClick={() => setLocation(`/product/${relatedProduct.id}`)}
-              />
-            ))}
+            {relatedProducts.map((relatedProduct) => {
+              // Use default price of $60 (size M) for display
+              const defaultPrice = getPriceBySize("M");
+              const productWithDefaultPrice = {
+                ...relatedProduct,
+                price: defaultPrice,
+              };
+              return (
+                <ProductCard
+                  key={relatedProduct.id}
+                  product={productWithDefaultPrice}
+                  onAddToCart={(p) => {
+                    addToCart({
+                      id: p.id,
+                      name: p.name,
+                      price: defaultPrice,
+                      image: p.image,
+                      size: "M",
+                      color: "Default",
+                    });
+                    toast({
+                      title: "Added to cart",
+                      description: `${p.name} has been added to your cart.`,
+                    });
+                  }}
+                  onClick={() => setLocation(`/product/${relatedProduct.id}`)}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
