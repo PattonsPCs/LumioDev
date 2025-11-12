@@ -6,7 +6,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/square/checkout-link", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { items } = req.body as {
-        items?: Array<{ id: string; quantity: number }>;
+        items?: Array<{ id: string; quantity: number; size?: string; color?: string }>;
       };
 
       const { url } = await createSquareCheckoutLink(items ?? []);

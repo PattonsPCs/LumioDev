@@ -3,9 +3,25 @@ import { SquareError, Square } from "square";
 import { squareClient, resolveSquareLocationId } from "./squareClient.js";
 import { getProductById } from "./products";
 
+// Size-based pricing
+function getPriceBySize(size: string): number {
+  const sizeUpper = size.toUpperCase();
+  if (sizeUpper === "XXL") {
+    return 65;
+  } else if (sizeUpper === "XXXL") {
+    return 70;
+  } else if (sizeUpper === "XXXXL") {
+    return 75;
+  } else {
+    // S-XL (includes XS, S, M, L, XL)
+    return 60;
+  }
+}
+
 interface CheckoutItemInput {
   id: string;
   quantity: number;
+  size?: string;
 }
 
 export async function createSquareCheckoutLink(
@@ -15,13 +31,17 @@ export async function createSquareCheckoutLink(
     throw new Error("Cart is empty.");
   }
 
-  // Extract base product ID from cart item IDs (format: "productId-size-color" or just "productId")
+  // Extract base product ID and size from cart item IDs (format: "productId-size-color" or just "productId")
   const normalizedItems = rawItems.map((item) => {
     const itemId = String(item.id);
-    // Cart items have IDs like "2-M-Default", extract just the product ID part
-    const baseProductId = itemId.split('-')[0];
+    // Cart items have IDs like "2-M-Default", extract parts
+    const parts = itemId.split('-');
+    const baseProductId = parts[0];
+    // Size might be in the ID or passed separately
+    const size = item.size || parts[1] || "M";
     return {
       id: baseProductId,
+      size,
       quantity: Number(item.quantity) || 0,
     };
   });
@@ -34,14 +54,17 @@ export async function createSquareCheckoutLink(
     if (item.quantity <= 0) {
       throw new Error(`Invalid quantity for product ${product.name}.`);
     }
+    const price = getPriceBySize(item.size);
     return {
       product,
+      size: item.size,
+      price,
       quantity: item.quantity,
     };
   });
 
   const subtotal = validatedItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
@@ -51,10 +74,10 @@ export async function createSquareCheckoutLink(
   const order: Square.Order = {
     locationId,
     lineItems: validatedItems.map((item) => ({
-      name: item.product.name,
+      name: `${item.product.name} (${item.size})`,
       quantity: item.quantity.toString(),
       basePriceMoney: {
-        amount: BigInt(Math.round(item.product.price * 100)),
+        amount: BigInt(Math.round(item.price * 100)),
         currency: "USD",
       },
     })),

@@ -10,6 +10,7 @@ import SunBeams from "@/components/SunBeams";
 import { getProductById, getRelatedProducts } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { getPriceBySize } from "@/lib/utils";
 import NotFound from "./not-found";
 
 export default function Product() {
@@ -41,10 +42,12 @@ export default function Product() {
       ? `Color ${product.colors.indexOf(selectedColor) + 1}`
       : "Default";
     
+    const price = getPriceBySize(selectedSize);
+    
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: price,
       image: product.image,
       size: selectedSize,
       color: colorName,
@@ -56,7 +59,7 @@ export default function Product() {
     });
   };
 
-  const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+  const sizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"];
   const colors = product.colors.map((hex, index) => ({
     hex,
     name: index === 0 ? "Golden Sun" : index === 1 ? "Coral Pink" : "Sandy Beige",
@@ -104,7 +107,7 @@ export default function Product() {
                 <span className="text-sm text-muted-foreground">(42 reviews)</span>
               </div>
               <p className="text-3xl font-bold text-primary" data-testid="text-product-price">
-                ${product.price}.00
+                ${getPriceBySize(selectedSize)}.00
               </p>
             </div>
 
